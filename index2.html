@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Global SLR Game</title>
+	
+</head>
+<body style="background-color:#DEB887">
+	
+	<img id="land" src="brown.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:1090px; height:555px;">
+
+	<img id="water" src="blue2.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:100px;height:555px;">
+
+
+	<img id="wall" src="wall.png" class="pictures" style="display:none; position:absolute; TOP:0px; LEFT:700px; width:10px; height:50px;">
+
+
+	<button id="endTurn" style="position:absolute; TOP:200px; LEFT:1100px" onclick="endTurn(this)">End Turn</button>
+
+	<button id="makeBricks" style="position:absolute; TOP:250px; LEFT:1100px" onclick="bricks(this)">Make Bricks</button>
+	<input type="text" id="brickAmount" style="font-size:100%; position:absolute; TOP:100px; LEFT:1100px" value="0">  </input>
+
+	<button id="makeWall" style="position:absolute; TOP:300px; LEFT:1100px" onclick="wall(this)">Make Wall</button>
+	
+	<script src="GlobalSLR.js"></script>
+		
+</body>
+</html>
+	
