@@ -8,21 +8,88 @@
 </head>
 <body style="background-color:#DEB887">
 	
+	
+
+	<div>
 	<img id="land" src="brown.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:1090px; height:555px;">
 
 	<img id="water" src="blue2.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:100px;height:555px;">
 
+	<div>
+	<img id="houseOne" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="gardenOne" title="garden" src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="mangroveImageOne" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+
+	<img id="houseTwo" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="gardenTwo" title="garden"src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="mangroveImageTwo" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+
+	<img id="houseThree" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="gardenThree" title="garden" src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="mangroveImageThree" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+
+	<img id="houseFour" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="gardenFour" title="garden" src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="mangroveImageFour" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+
+	<img id="houseFive" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="gardenFive" title="garden" src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
+	<img id="mangroveImageFive" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+	</div>
+
 
 	<img id="wall" src="wall.png" class="pictures" style="display:none; position:absolute; TOP:0px; LEFT:700px; width:10px; height:50px;">
 
+	<img id="black" src="blackTwo.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:1090px; height:555px;">
 
-	<button id="endTurn" style="position:absolute; TOP:200px; LEFT:1100px" onclick="endTurn(this)">End Turn</button>
+	<p id="instructions" style="font-size:100%; position:absolute; color:white; display:block; TOP:150px; LEFT:300px"> Welcome to Global SLR <br> <br> Goal: Keep your village alive. <br> <br> The rising sea level will move closer to your villager's homes each turn. <br> Completely build a wall to stop the rising sea. <br> Plant mangroves to decrease the speed of the sea level rise. <br> If all of your villager's homes flood, you lose. <br> If your food level reaches 0, you lose. <br> <br> Good Luck</p>
+	<button id="instructButt" style="position:absolute; display:block; TOP:400px; LEFT:300px" onclick="instruct(this)">OK</button>
 
-	<button id="makeBricks" style="position:absolute; TOP:250px; LEFT:1100px" onclick="bricks(this)">Make Bricks</button>
-	<input type="text" id="brickAmount" style="font-size:100%; position:absolute; TOP:100px; LEFT:1100px" value="0">  </input>
-
-	<button id="makeWall" style="position:absolute; TOP:300px; LEFT:1100px" onclick="wall(this)">Make Wall</button>
+    </div>
 	
+
+	
+	<button id="endTurn" style="position:absolute; TOP:500px; LEFT:1100px" onclick="endTurn(this)">End Turn</button>
+
+	<p id="brickAmountLabel" style="font-size:100%; position:absolute; TOP:150px; LEFT:1100px"> Brick Amount: </p>
+	<input type="text" id="brickAmount" style="font-size:100%; position:absolute; TOP:190px; LEFT:1100px" value="0" readonly>  
+	<input type="text" id="wallAmount" style="font-size:100%; position:absolute; display:none; TOP:104px; LEFT:1100px" value="0" readonly>  
+	<input type="text" id="speed" style="font-size:100%; position:absolute; display:none; TOP:104px; LEFT:1100px" value="50">  
+	<p id="foodAmountLabel" style="font-size:100%; position:absolute; TOP:315px; LEFT:1100px"> Food Amount: </p>
+	<input type="text" id="foodAmount" style="font-size:100%; position:absolute; TOP:355px; LEFT:1100px" value="5" readonly>  
+
+	<p id="testParagraph" style="font-size:100%; position:absolute; TOP:200px; LEFT:1100px"> </p>
+
+	<p id="peopleListOne" style="font-size:100%; position:absolute; display:block; TOP:10px; LEFT:1100px">  </p>
+	<button id="oneBricks" title="make 1 brick" style="position:absolute; display:block; TOP:20px; LEFT:1160px" onclick="bricksOne(this)">B</button>
+	<button id="oneWall" title="requires 3 bricks" style="position:absolute; TOP:230px; LEFT:1100px" onclick="wall(this)">Build Wall</button>
+	<button id="changeWallRight" title="requires 1 brick" style="position:absolute; TOP:270px; LEFT:1200px" onclick="moveWallRight(this)">Move Wall Right</button>
+	<button id="changeWallLeft" title="requires 1 brick" style="position:absolute; TOP:270px; LEFT:1100px" onclick="moveWallLeft(this)">Move Wall Left</button>
+	<button id="oneFood" title="make 1 food" style="position:absolute; display:block; TOP:20px; LEFT:1200px" onclick="foodBarOne(this)">F</button>
+	<button id="oneMangrove" title="plant 1 mangrove" style="position:absolute; TOP:20px; LEFT:1240px" onclick="plantMangroveOne(this)">P</button>
+
+	<p id="peopleListTwo" style="font-size:100%; position:absolute; display:block; TOP:30px; LEFT:1100px">  </p>
+	<button id="twoBricks" title="make 1 brick" style="position:absolute; TOP:40px; LEFT:1160px" onclick="bricksTwo(this)">B</button>
+	
+	<button id="twoFood" title="make 1 food" style="position:absolute; display:block; TOP:40px; LEFT:1200px" onclick="foodBarTwo(this)">F</button>
+	<button id="twoMangrove" title="plant 1 mangrove" style="position:absolute; TOP:40px; LEFT:1240px" onclick="plantMangroveTwo(this)">P</button>
+
+	<p id="peopleListThree" style="font-size:100%; position:absolute; display:block; TOP:50px; LEFT:1100px">  </p>
+	<button id="threeBricks" title="make 1 brick" style="position:absolute; TOP:60px; LEFT:1160px" onclick="bricksThree(this)">B</button>
+	<button id="threeFood" title="make 1 food" style="position:absolute; display:block; TOP:60px; LEFT:1200px" onclick="foodBarThree(this)">F</button>
+	<button id="threeMangrove" title="plant 1 mangrove" style="position:absolute; TOP:60px; LEFT:1240px" onclick="plantMangroveThree(this)">P</button>
+
+	<p id="peopleListFour" style="font-size:100%; position:absolute; display:block; TOP:70px; LEFT:1100px">  </p>
+	<button id="fourBricks" title="make 1 brick" style="position:absolute; TOP:80px; LEFT:1160px" onclick="bricksFour(this)">B</button>
+	
+	<button id="fourFood" title="make 1 food" style="position:absolute; display:block; TOP:80px; LEFT:1200px" onclick="foodBarFour(this)">F</button>
+	<button id="fourMangrove" title="plant 1 mangrove" style="position:absolute; TOP:80px; LEFT:1240px" onclick="plantMangroveFour(this)">P</button>
+
+	<p id="peopleListFive" style="font-size:100%; position:absolute; display:block; TOP:90px; LEFT:1100px">  </p>
+	<button id="fiveBricks" title="make 1 brick" style="position:absolute; TOP:100px; LEFT:1160px" onclick="bricksFive(this)">B</button>
+	
+	<button id="fiveFood" title="make 1 food" style="position:absolute; display:block; TOP:100px; LEFT:1200px" onclick="foodBarFive(this)">F</button>
+	<button id="fiveMangrove" title="plant 1 mangrove" style="position:absolute; TOP:100px; LEFT:1240px" onclick="plantMangroveFive(this)">P</button>
 	<script src="GlobalSLR.js"></script>
 		
 </body>
