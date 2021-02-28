@@ -42,7 +42,7 @@
 
 	<img id="black" src="blackTwo.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:1090px; height:565px;">
 
-	<p id="instructions" style="font-size:100%; position:absolute; color:white; display:block; TOP:150px; LEFT:300px"> Welcome to Global SLR <br> <br> Goal: Keep your village alive. <br> <br> The rising sea level will move closer to your villager's homes each turn. <br> Completely build a wall to stop the rising sea. <br> Plant mangroves to decrease the speed of the sea level rise. <br> If all of your villager's homes flood, you lose. <br> If your food level reaches 0, you lose. <br> <br> Good Luck</p>
+	<p id="instructions" style="font-size:100%; position:absolute; color:white; display:block; TOP:100px; LEFT:200px"> Welcome to Global SLR <br> <br> Goal: Keep your village alive. <br> <br> The rising sea level will move closer to your villager's homes each turn. <br> <br> The locations of villager's homes are indicated with orange boxes. <br> The locations of gardens are indicated with green boxes. <br> <br>Completely build a wall to stop the rising sea. <br> <br> You can not initally choose the location of the wall, but once you start building you can shift the wall to the left or right, for a price. <br> Plant mangroves to decrease the speed of the sea level rise, for a price. <br> If all of your villager's homes flood, you lose. <br> If your food level reaches 0, you lose. <br> <br> Good Luck</p>
 	<button id="instructButt" style="position:absolute; display:block; TOP:400px; LEFT:300px" onclick="instruct(this)">OK</button>
 
     </div>
@@ -60,36 +60,40 @@
 
 	<p id="testParagraph" style="font-size:100%; position:absolute; TOP:200px; LEFT:1100px"> </p>
 
-	<p id="peopleListOne" style="font-size:100%; position:absolute; display:block; TOP:10px; LEFT:1100px">  </p>
-	<button id="oneBricks" title="make 1 brick" style="position:absolute; display:block; TOP:20px; LEFT:1160px" onclick="bricksOne(this)">B</button>
+	<p id="labelOne" style="font-size:100%; position:absolute; TOP:05px; LEFT:1100px"> Villagers:</p>
+
+	<p id="labelTwo" style="font-size:100%; position:absolute; TOP:05px; LEFT:1180px"> Activities:</p>
+
+	<p id="peopleListOne" style="font-size:100%; position:absolute; display:block; TOP:30px; LEFT:1100px">  </p>
+	<button id="oneBricks" title="make 1 brick" style="position:absolute; display:block; TOP:45px; LEFT:1165px" onclick="bricksOne(this)">B</button>
 	<button id="oneWall" title="requires 3 bricks" style="position:absolute; TOP:230px; LEFT:1100px" onclick="wall(this)">Build Wall</button>
 	<button id="changeWallRight" title="requires 1 brick" style="position:absolute; TOP:270px; LEFT:1200px" onclick="moveWallRight(this)">Move Wall Right</button>
 	<button id="changeWallLeft" title="requires 1 brick" style="position:absolute; TOP:270px; LEFT:1100px" onclick="moveWallLeft(this)">Move Wall Left</button>
-	<button id="oneFood" title="make 1 food" style="position:absolute; display:block; TOP:20px; LEFT:1200px" onclick="foodBarOne(this)">F</button>
-	<button id="oneMangrove" title="plant 1 mangrove" style="position:absolute; TOP:20px; LEFT:1240px" onclick="plantMangroveOne(this)">P</button>
+	<button id="oneFood" title="make 1 food" style="position:absolute; display:block; TOP:45px; LEFT:1205px" onclick="foodBarOne(this)">F</button>
+	<button id="oneMangrove" title="plant 1 mangrove" style="position:absolute; TOP:45px; LEFT:1245px" onclick="plantMangroveOne(this)">P</button>
 
-	<p id="peopleListTwo" style="font-size:100%; position:absolute; display:block; TOP:30px; LEFT:1100px">  </p>
-	<button id="twoBricks" title="make 1 brick" style="position:absolute; TOP:40px; LEFT:1160px" onclick="bricksTwo(this)">B</button>
+	<p id="peopleListTwo" style="font-size:100%; position:absolute; display:block; TOP:50px; LEFT:1100px">  </p>
+	<button id="twoBricks" title="make 1 brick" style="position:absolute; TOP:65px; LEFT:1165px" onclick="bricksTwo(this)">B</button>
 	
-	<button id="twoFood" title="make 1 food" style="position:absolute; display:block; TOP:40px; LEFT:1200px" onclick="foodBarTwo(this)">F</button>
-	<button id="twoMangrove" title="plant 1 mangrove" style="position:absolute; TOP:40px; LEFT:1240px" onclick="plantMangroveTwo(this)">P</button>
+	<button id="twoFood" title="make 1 food" style="position:absolute; display:block; TOP:65px; LEFT:1205px" onclick="foodBarTwo(this)">F</button>
+	<button id="twoMangrove" title="plant 1 mangrove" style="position:absolute; TOP:65px; LEFT:1245px" onclick="plantMangroveTwo(this)">P</button>
 
-	<p id="peopleListThree" style="font-size:100%; position:absolute; display:block; TOP:50px; LEFT:1100px">  </p>
-	<button id="threeBricks" title="make 1 brick" style="position:absolute; TOP:60px; LEFT:1160px" onclick="bricksThree(this)">B</button>
-	<button id="threeFood" title="make 1 food" style="position:absolute; display:block; TOP:60px; LEFT:1200px" onclick="foodBarThree(this)">F</button>
-	<button id="threeMangrove" title="plant 1 mangrove" style="position:absolute; TOP:60px; LEFT:1240px" onclick="plantMangroveThree(this)">P</button>
+	<p id="peopleListThree" style="font-size:100%; position:absolute; display:block; TOP:70px; LEFT:1100px">  </p>
+	<button id="threeBricks" title="make 1 brick" style="position:absolute; TOP:85px; LEFT:1165px" onclick="bricksThree(this)">B</button>
+	<button id="threeFood" title="make 1 food" style="position:absolute; display:block; TOP:85px; LEFT:1205px" onclick="foodBarThree(this)">F</button>
+	<button id="threeMangrove" title="plant 1 mangrove" style="position:absolute; TOP:85px; LEFT:1245px" onclick="plantMangroveThree(this)">P</button>
 
-	<p id="peopleListFour" style="font-size:100%; position:absolute; display:block; TOP:70px; LEFT:1100px">  </p>
-	<button id="fourBricks" title="make 1 brick" style="position:absolute; TOP:80px; LEFT:1160px" onclick="bricksFour(this)">B</button>
+	<p id="peopleListFour" style="font-size:100%; position:absolute; display:block; TOP:90px; LEFT:1100px">  </p>
+	<button id="fourBricks" title="make 1 brick" style="position:absolute; TOP:105px; LEFT:1165px" onclick="bricksFour(this)">B</button>
 	
-	<button id="fourFood" title="make 1 food" style="position:absolute; display:block; TOP:80px; LEFT:1200px" onclick="foodBarFour(this)">F</button>
-	<button id="fourMangrove" title="plant 1 mangrove" style="position:absolute; TOP:80px; LEFT:1240px" onclick="plantMangroveFour(this)">P</button>
+	<button id="fourFood" title="make 1 food" style="position:absolute; display:block; TOP:105px; LEFT:1205px" onclick="foodBarFour(this)">F</button>
+	<button id="fourMangrove" title="plant 1 mangrove" style="position:absolute; TOP:105px; LEFT:1245px" onclick="plantMangroveFour(this)">P</button>
 
-	<p id="peopleListFive" style="font-size:100%; position:absolute; display:block; TOP:90px; LEFT:1100px">  </p>
-	<button id="fiveBricks" title="make 1 brick" style="position:absolute; TOP:100px; LEFT:1160px" onclick="bricksFive(this)">B</button>
+	<p id="peopleListFive" style="font-size:100%; position:absolute; display:block; TOP:110px; LEFT:1100px">  </p>
+	<button id="fiveBricks" title="make 1 brick" style="position:absolute; TOP:125px; LEFT:1165px" onclick="bricksFive(this)">B</button>
 	
-	<button id="fiveFood" title="make 1 food" style="position:absolute; display:block; TOP:100px; LEFT:1200px" onclick="foodBarFive(this)">F</button>
-	<button id="fiveMangrove" title="plant 1 mangrove" style="position:absolute; TOP:100px; LEFT:1240px" onclick="plantMangroveFive(this)">P</button>
+	<button id="fiveFood" title="make 1 food" style="position:absolute; display:block; TOP:125px; LEFT:1205px" onclick="foodBarFive(this)">F</button>
+	<button id="fiveMangrove" title="plant 1 mangrove" style="position:absolute; TOP:125px; LEFT:1245px" onclick="plantMangroveFive(this)">P</button>
 	<script src="GlobalSLR.js"></script>
 		
 </body>
