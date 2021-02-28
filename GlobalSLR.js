@@ -66,15 +66,28 @@ gardenFive.style.left = gardenFiveLocationX;
 gardenFive.style.top = gardenFiveLocationY;
 
 //make rising water and walls work. Need to make it so user can choose where to place wall
-var speed = parseInt(document.querySelector("#speed").value);
+//var speed = parseInt(document.querySelector("#speed").value);
+var speed = 50;
 
 function endTurn(click) {
 	var water = document.querySelector("#water");
-	var currWidth = water.clientWidth;
+	var currWidth = parseInt(water.clientWidth);
 	var wall = document.querySelector("#wall");
+	var waterW = parseInt(water.style.width);
+	var waterH = parseInt(water.style.height);
+
+	var wallL = parseInt(wall.style.left);
+	var wallH = parseInt(wall.style.height);
+	console.log(speed);
 	
+	/*
 	if ((water.style.width != wall.style.left)
 			|| ((water.style.width >= wall.style.left) && (water.style.height >= wall.style.height))) { 
+		water.style.width = (currWidth + speed) +'px';
+	}
+	*/
+	if ((waterW < wallL)
+			|| ((waterW >= wallL) && (waterH >= wallH))) { 
 		water.style.width = (currWidth + speed) +'px';
 	}
 	else {
@@ -462,7 +475,8 @@ function plantMangroveOne(click) {
 
 	document.getElementById('foodAmount').value -=2;
 
-	speed = parseInt(document.querySelector("#speed").value) - 9;
+	//speed = parseInt(document.querySelector("#speed").value) -9;
+	speed = (speed - 7);
 }
 
 function plantMangroveTwo(click) {
@@ -484,7 +498,8 @@ function plantMangroveTwo(click) {
 
 	document.getElementById('foodAmount').value -=2;
 
-	speed = parseInt(document.querySelector("#speed").value) - 9;
+//	speed = parseInt(document.querySelector("#speed").value) -9;
+	speed = (speed - 7);
 }
 
 function plantMangroveThree(click) {
@@ -506,7 +521,8 @@ function plantMangroveThree(click) {
 
 	document.getElementById('foodAmount').value -=2;
 
-	speed = parseInt(document.querySelector("#speed").value) - 9;
+	//speed = parseInt(document.querySelector("#speed").value) - 9;
+	speed = (speed -7);
 }
 
 function plantMangroveFour(click) {
@@ -528,7 +544,8 @@ function plantMangroveFour(click) {
 
 	document.getElementById('foodAmount').value -=2;
 
-	speed = parseInt(document.querySelector("#speed").value) - 9;
+	//speed = parseInt(document.querySelector("#speed").value) - 9;
+	speed = (speed -7);
 }
 
 function plantMangroveFive(click) {
@@ -550,7 +567,8 @@ function plantMangroveFive(click) {
 
 	document.getElementById('foodAmount').value -=2;
 
-	speed = parseInt(document.querySelector("#speed").value) - 9;
+	//speed = parseInt(document.querySelector("#speed").value) - 9;
+	speed = (speed -7);
 }
 
 //getting rid of villagers with flooded houses:
