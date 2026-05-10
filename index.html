@@ -1,101 +1,205 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Global SLR Game</title>
-	
+  <meta charset="UTF-8">
+  <title>Global SLR Game</title>
+  <style>
+    body { background-color: #DEB887; margin: 0; font-family: sans-serif; }
+
+    #lobby {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #DEB887;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    #lobby h1 { font-size: 2.5em; margin-bottom: 16px; color: #333; }
+    #lobby input {
+      font-size: 1.1em; padding: 8px 12px; margin: 6px;
+      width: 220px; border-radius: 4px; border: 1px solid #999;
+    }
+    #lobby button {
+      font-size: 1.1em; padding: 10px 22px; margin: 6px;
+      cursor: pointer; border-radius: 4px;
+      background: #8B6914; color: white; border: none;
+    }
+    #lobby button:hover { background: #704f0e; }
+    .lobby-section { text-align: center; }
+    .error-msg { color: #c00; font-size: 0.9em; min-height: 1.2em; }
+    #roomCodeDisplay {
+      font-size: 2.2em; font-weight: bold; letter-spacing: 6px;
+      color: #333; background: #fff; padding: 8px 20px; border-radius: 6px;
+      display: inline-block; margin: 8px 0;
+    }
+    #playerList { list-style: none; padding: 0; text-align: left; }
+    #playerList li { padding: 4px 0; font-size: 1.05em; }
+
+    #gameOverOverlay {
+      display: none;
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.72);
+      z-index: 9998;
+      flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    #gameOverBox {
+      background: #DEB887; border-radius: 12px;
+      padding: 40px 60px; text-align: center;
+      font-size: 1.4em; max-width: 500px;
+    }
+    #gameOverBox button {
+      font-size: 0.75em; padding: 10px 22px;
+      margin-top: 20px; cursor: pointer;
+    }
+  </style>
 </head>
-<body style="background-color:#DEB887">
-	
-	
+<body>
 
-	<div>
-	<img id="land" src="brown.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:1090px; height:565px;">
+<!-- ── LOBBY ─────────────────────────────────────────── -->
+<div id="lobby">
+  <h1>Global SLR</h1>
 
-	<img id="water" src="blue2.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:100px;height:565px;">
+  <div id="enterName" class="lobby-section">
+    <p>Enter your name:</p>
+    <input type="text" id="playerName" placeholder="Your name" maxlength="20"
+           onkeydown="if(event.key==='Enter') goToLobbyOptions()">
+    <br>
+    <button onclick="goToLobbyOptions()">Continue</button>
+  </div>
 
-	<div>
-	<img id="houseOne" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="gardenOne" title="garden" src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="mangroveImageOne" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+  <div id="lobbyOptions" class="lobby-section" style="display:none">
+    <button onclick="createRoom()">Create New Game</button>
+    <p style="margin:12px 0">— or join an existing game —</p>
+    <input type="text" id="joinCode" placeholder="Room code (e.g. AB3K7)"
+           maxlength="5" style="text-transform:uppercase; letter-spacing:3px">
+    <br>
+    <button onclick="joinRoom()">Join Game</button>
+    <p class="error-msg" id="lobbyError"></p>
+  </div>
 
-	<img id="houseTwo" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="gardenTwo" title="garden"src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="mangroveImageTwo" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+  <div id="waitingRoom" class="lobby-section" style="display:none">
+    <p>Share this code with your friends:</p>
+    <div id="roomCodeDisplay"></div>
+    <br>
+    <p><strong>Players in room:</strong></p>
+    <ul id="playerList"></ul>
+    <button id="startButton" onclick="startGame()" style="display:none">Start Game</button>
+    <p id="waitingMsg" style="color:#555">Waiting for the host to start...</p>
+  </div>
+</div>
 
-	<img id="houseThree" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="gardenThree" title="garden" src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="mangroveImageThree" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+<!-- ── GAME OVER ──────────────────────────────────────── -->
+<div id="gameOverOverlay">
+  <div id="gameOverBox">
+    <p id="gameOverMsg"></p>
+    <button onclick="location.reload()">Play Again</button>
+  </div>
+</div>
 
-	<img id="houseFour" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="gardenFour" title="garden" src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="mangroveImageFour" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
+<!-- ── GAME SCREEN ───────────────────────────────────── -->
+<div id="gameScreen" style="display:none; position:relative;">
 
-	<img id="houseFive" title="home" src="house.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="gardenFive" title="garden" src="green.png" class="pictures" style="position:absolute; TOP:0px; LEFT:0px; width:30px; height:30px;">
-	<img id="mangroveImageFive" src="green.png" class="pictures" style="position:absolute; display:none; TOP:0px; LEFT:0px; width:10px; height:20px;">
-	</div>
+  <img id="land"  src="brown.png" style="position:absolute; top:0; left:0; width:1090px; height:565px;">
+  <img id="water" src="blue2.png" style="position:absolute; top:0; left:0; width:100px; height:565px;">
 
+  <!-- Houses, gardens, mangroves -->
+  <img id="houseOne"        src="house.png" title="home"   style="position:absolute; display:block; top:0; left:0; width:30px; height:30px;">
+  <img id="gardenOne"       src="green.png" title="garden" style="position:absolute; top:0; left:0; width:30px; height:30px;">
+  <img id="mangroveImageOne" src="green.png"               style="position:absolute; display:none; top:0; left:0; width:10px; height:20px;">
 
-	<img id="wall" src="wall.png" class="pictures" style="display:none; position:absolute; TOP:0px; LEFT:700px; width:20px; height:50px;">
+  <img id="houseTwo"        src="house.png" title="home"   style="position:absolute; display:block; top:0; left:0; width:30px; height:30px;">
+  <img id="gardenTwo"       src="green.png" title="garden" style="position:absolute; top:0; left:0; width:30px; height:30px;">
+  <img id="mangroveImageTwo" src="green.png"               style="position:absolute; display:none; top:0; left:0; width:10px; height:20px;">
 
-	<img id="black" src="blackTwo.png" class="pictures" style="position:absolute; display:block; TOP:0px; LEFT:0px; width:1090px; height:565px;">
+  <img id="houseThree"        src="house.png" title="home"   style="position:absolute; display:block; top:0; left:0; width:30px; height:30px;">
+  <img id="gardenThree"       src="green.png" title="garden" style="position:absolute; top:0; left:0; width:30px; height:30px;">
+  <img id="mangroveImageThree" src="green.png"               style="position:absolute; display:none; top:0; left:0; width:10px; height:20px;">
 
-	<p id="instructions" style="font-size:100%; position:absolute; color:white; display:block; TOP:100px; LEFT:200px"> Welcome to Global SLR <br> <br> Goal: Keep your village alive. <br> <br> The rising sea level will move closer to your villager's homes each turn. <br> <br> The locations of villager's homes are indicated with orange boxes. <br> The locations of gardens are indicated with green boxes. <br> <br>Completely build a wall to stop the rising sea. <br> <br> You can not initally choose the location of the wall, but once you start building you can shift the wall to the left or right, for a price. <br> Plant mangroves to decrease the speed of the sea level rise, for a price. <br> If all of your villager's homes flood, you lose. <br> If your food level reaches 0, you lose. <br> <br> Good Luck</p>
-	<button id="instructButt" style="position:absolute; display:block; TOP:400px; LEFT:300px" onclick="instruct(this)">OK</button>
+  <img id="houseFour"        src="house.png" title="home"   style="position:absolute; display:block; top:0; left:0; width:30px; height:30px;">
+  <img id="gardenFour"       src="green.png" title="garden" style="position:absolute; top:0; left:0; width:30px; height:30px;">
+  <img id="mangroveImageFour" src="green.png"               style="position:absolute; display:none; top:0; left:0; width:10px; height:20px;">
 
-    </div>
-	
+  <img id="houseFive"        src="house.png" title="home"   style="position:absolute; display:block; top:0; left:0; width:30px; height:30px;">
+  <img id="gardenFive"       src="green.png" title="garden" style="position:absolute; top:0; left:0; width:30px; height:30px;">
+  <img id="mangroveImageFive" src="green.png"               style="position:absolute; display:none; top:0; left:0; width:10px; height:20px;">
 
-	
-	<button id="endTurn" style="position:absolute; TOP:500px; LEFT:1100px" onclick="endTurn(this)">End Turn</button>
+  <img id="wall" src="wall.png" style="display:none; position:absolute; top:0; left:700px; width:20px; height:50px;">
 
-	<p id="brickAmountLabel" style="font-size:100%; position:absolute; TOP:150px; LEFT:1100px"> Brick Amount: </p>
-	<input type="text" id="brickAmount" style="font-size:100%; position:absolute; TOP:190px; LEFT:1100px" value="0" readonly>  
-	<input type="text" id="wallAmount" style="font-size:100%; position:absolute; display:none; TOP:104px; LEFT:1100px" value="0" readonly>  
-	<input type="text" id="speed" style="font-size:100%; position:absolute; display:none; TOP:104px; LEFT:1100px" value="50"> 
-	<p id="foodAmountLabel" style="font-size:100%; position:absolute; TOP:315px; LEFT:1100px"> Food Amount: </p>
-	<input type="text" id="foodAmount" style="font-size:100%; position:absolute; TOP:355px; LEFT:1100px" value="5" readonly>  
+  <!-- Instructions overlay -->
+  <img id="black" src="blackTwo.png" style="position:absolute; display:block; top:0; left:0; width:1090px; height:565px;">
+  <p id="instructions" style="position:absolute; color:white; display:block; top:55px; left:140px; font-size:95%; line-height:1.7">
+    <strong>Welcome to Global SLR</strong><br><br>
+    Goal: Keep your village alive — prevent homes from flooding.<br><br>
+    Orange boxes = villager homes &nbsp;|&nbsp; Green boxes = gardens<br><br>
+    Each surviving garden produces <strong>1 food per turn</strong>. Flooded gardens produce nothing.<br><br>
+    <strong>Your villager's action (pick one per turn):</strong><br>
+    &nbsp;&nbsp;<strong>B</strong> = Make 1 brick &nbsp; <strong>F</strong> = Gather 1 food &nbsp; <strong>P</strong> = Plant a mangrove (costs 2 food, slows the sea)<br><br>
+    <strong>Shared wall actions (any player, any time):</strong><br>
+    &nbsp;&nbsp;Build Wall = raise wall height (costs 3 bricks)<br>
+    &nbsp;&nbsp;Move Wall Left / Right = reposition the wall (costs 1 brick each)<br><br>
+    All players must click <strong>End Turn</strong> to advance the round.<br><br>
+    You lose if all homes flood or food reaches 0.
+  </p>
+  <button id="instructButt" style="position:absolute; display:block; top:440px; left:280px"
+          onclick="instruct()">OK, Let's Play!</button>
 
-	<p id="testParagraph" style="font-size:100%; position:absolute; TOP:200px; LEFT:1100px"> </p>
+  <!-- ── Sidebar ── -->
+  <button id="endTurn" style="position:absolute; top:500px; left:1100px"
+          onclick="voteEndTurn()">End Turn</button>
+  <p id="endTurnStatus" style="position:absolute; top:532px; left:1100px; font-size:80%; color:#444; margin:0;"></p>
 
-	<p id="labelOne" style="font-size:100%; position:absolute; TOP:05px; LEFT:1100px"> Villagers:</p>
+  <p style="position:absolute; top:150px; left:1100px; margin:0">Bricks:</p>
+  <input type="text" id="brickAmount" value="0" readonly
+         style="position:absolute; top:172px; left:1100px; width:55px;">
 
-	<p id="labelTwo" style="font-size:100%; position:absolute; TOP:05px; LEFT:1180px"> Activities:</p>
+  <p style="position:absolute; top:210px; left:1100px; margin:0">Food:</p>
+  <input type="text" id="foodAmount" value="5" readonly
+         style="position:absolute; top:232px; left:1100px; width:55px;">
 
-	<p id="peopleListOne" style="font-size:100%; position:absolute; display:block; TOP:30px; LEFT:1100px">  </p>
-	<button id="oneBricks" title="make 1 brick" style="position:absolute; display:block; TOP:45px; LEFT:1165px" onclick="bricksOne(this)">B</button>
-	<button id="oneWall" title="requires 3 bricks" style="position:absolute; TOP:230px; LEFT:1100px" onclick="wall(this)">Build Wall</button>
-	<button id="changeWallRight" title="requires 1 brick" style="position:absolute; TOP:270px; LEFT:1200px" onclick="moveWallRight(this)">Move Wall Right</button>
-	<button id="changeWallLeft" title="requires 1 brick" style="position:absolute; TOP:270px; LEFT:1100px" onclick="moveWallLeft(this)">Move Wall Left</button>
-	<button id="oneFood" title="make 1 food" style="position:absolute; display:block; TOP:45px; LEFT:1205px" onclick="foodBarOne(this)">F</button>
-	<button id="oneMangrove" title="plant 1 mangrove" style="position:absolute; TOP:45px; LEFT:1245px" onclick="plantMangroveOne(this)">P</button>
+  <p style="position:absolute; top:5px; left:1100px; margin:0"><strong>Villagers:</strong></p>
+  <p style="position:absolute; top:5px; left:1200px; margin:0"><strong>Act:</strong></p>
 
-	<p id="peopleListTwo" style="font-size:100%; position:absolute; display:block; TOP:50px; LEFT:1100px">  </p>
-	<button id="twoBricks" title="make 1 brick" style="position:absolute; TOP:65px; LEFT:1165px" onclick="bricksTwo(this)">B</button>
-	
-	<button id="twoFood" title="make 1 food" style="position:absolute; display:block; TOP:65px; LEFT:1205px" onclick="foodBarTwo(this)">F</button>
-	<button id="twoMangrove" title="plant 1 mangrove" style="position:absolute; TOP:65px; LEFT:1245px" onclick="plantMangroveTwo(this)">P</button>
+  <!-- Villager rows -->
+  <p id="peopleListOne"   style="position:absolute; top:28px;  left:1100px; margin:0; font-size:90%; display:block;"></p>
+  <button id="oneBricks"   title="Make 1 brick"           style="position:absolute; top:25px;  left:1195px" onclick="doMakeBricks('one')">B</button>
+  <button id="oneFood"     title="Gather 1 food"          style="position:absolute; top:25px;  left:1220px" onclick="doMakeFood('one')">F</button>
+  <button id="oneMangrove" title="Plant mangrove (2 food)" style="position:absolute; top:25px;  left:1245px" onclick="doPlantMangrove('one')">P</button>
 
-	<p id="peopleListThree" style="font-size:100%; position:absolute; display:block; TOP:70px; LEFT:1100px">  </p>
-	<button id="threeBricks" title="make 1 brick" style="position:absolute; TOP:85px; LEFT:1165px" onclick="bricksThree(this)">B</button>
-	<button id="threeFood" title="make 1 food" style="position:absolute; display:block; TOP:85px; LEFT:1205px" onclick="foodBarThree(this)">F</button>
-	<button id="threeMangrove" title="plant 1 mangrove" style="position:absolute; TOP:85px; LEFT:1245px" onclick="plantMangroveThree(this)">P</button>
+  <p id="peopleListTwo"   style="position:absolute; top:53px;  left:1100px; margin:0; font-size:90%; display:block;"></p>
+  <button id="twoBricks"   title="Make 1 brick"           style="position:absolute; top:50px;  left:1195px" onclick="doMakeBricks('two')">B</button>
+  <button id="twoFood"     title="Gather 1 food"          style="position:absolute; top:50px;  left:1220px" onclick="doMakeFood('two')">F</button>
+  <button id="twoMangrove" title="Plant mangrove (2 food)" style="position:absolute; top:50px;  left:1245px" onclick="doPlantMangrove('two')">P</button>
 
-	<p id="peopleListFour" style="font-size:100%; position:absolute; display:block; TOP:90px; LEFT:1100px">  </p>
-	<button id="fourBricks" title="make 1 brick" style="position:absolute; TOP:105px; LEFT:1165px" onclick="bricksFour(this)">B</button>
-	
-	<button id="fourFood" title="make 1 food" style="position:absolute; display:block; TOP:105px; LEFT:1205px" onclick="foodBarFour(this)">F</button>
-	<button id="fourMangrove" title="plant 1 mangrove" style="position:absolute; TOP:105px; LEFT:1245px" onclick="plantMangroveFour(this)">P</button>
+  <p id="peopleListThree"   style="position:absolute; top:78px;  left:1100px; margin:0; font-size:90%; display:block;"></p>
+  <button id="threeBricks"   title="Make 1 brick"           style="position:absolute; top:75px;  left:1195px" onclick="doMakeBricks('three')">B</button>
+  <button id="threeFood"     title="Gather 1 food"          style="position:absolute; top:75px;  left:1220px" onclick="doMakeFood('three')">F</button>
+  <button id="threeMangrove" title="Plant mangrove (2 food)" style="position:absolute; top:75px;  left:1245px" onclick="doPlantMangrove('three')">P</button>
 
-	<p id="peopleListFive" style="font-size:100%; position:absolute; display:block; TOP:110px; LEFT:1100px">  </p>
-	<button id="fiveBricks" title="make 1 brick" style="position:absolute; TOP:125px; LEFT:1165px" onclick="bricksFive(this)">B</button>
-	
-	<button id="fiveFood" title="make 1 food" style="position:absolute; display:block; TOP:125px; LEFT:1205px" onclick="foodBarFive(this)">F</button>
-	<button id="fiveMangrove" title="plant 1 mangrove" style="position:absolute; TOP:125px; LEFT:1245px" onclick="plantMangroveFive(this)">P</button>
-	<script src="GlobalSLR.js"></script>
-		
+  <p id="peopleListFour"   style="position:absolute; top:103px; left:1100px; margin:0; font-size:90%; display:block;"></p>
+  <button id="fourBricks"   title="Make 1 brick"           style="position:absolute; top:100px; left:1195px" onclick="doMakeBricks('four')">B</button>
+  <button id="fourFood"     title="Gather 1 food"          style="position:absolute; top:100px; left:1220px" onclick="doMakeFood('four')">F</button>
+  <button id="fourMangrove" title="Plant mangrove (2 food)" style="position:absolute; top:100px; left:1245px" onclick="doPlantMangrove('four')">P</button>
+
+  <p id="peopleListFive"   style="position:absolute; top:128px; left:1100px; margin:0; font-size:90%; display:block;"></p>
+  <button id="fiveBricks"   title="Make 1 brick"           style="position:absolute; top:125px; left:1195px" onclick="doMakeBricks('five')">B</button>
+  <button id="fiveFood"     title="Gather 1 food"          style="position:absolute; top:125px; left:1220px" onclick="doMakeFood('five')">F</button>
+  <button id="fiveMangrove" title="Plant mangrove (2 food)" style="position:absolute; top:125px; left:1245px" onclick="doPlantMangrove('five')">P</button>
+
+  <!-- Wall controls (shared — any player can use) -->
+  <button title="Raise wall (3 bricks)"   style="position:absolute; top:290px; left:1100px" onclick="doBuildWall()">Build Wall</button>
+  <button title="Move wall left (1 brick)"  style="position:absolute; top:320px; left:1100px" onclick="doMoveWallLeft()">&#8592; Wall</button>
+  <button title="Move wall right (1 brick)" style="position:absolute; top:320px; left:1168px" onclick="doMoveWallRight()">Wall &#8594;</button>
+
+  <p id="myVillagerLabel" style="position:absolute; top:460px; left:1100px; margin:0; font-size:85%; font-weight:bold; color:#333;"></p>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="GlobalSLR.js"></script>
 </body>
 </html>
+
 	
