@@ -1,648 +1,503 @@
+// ================================================================
+// FIREBASE CONFIG
+// Replace every value below with your own project's config.
+// Get it from: Firebase Console → Project Settings → Your Apps
+// ================================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBI2DDv7Jf-nuKGOkiWv8h3vj55Klrkakk",
+  authDomain: "slrise.firebaseapp.com",
+  databaseURL: "https://slrise-default-rtdb.firebaseio.com",
+  projectId: "slrise",
+  storageBucket: "slrise.firebasestorage.app",
+  messagingSenderId: "1017248731611",
+  appId: "1:1017248731611:web:7c84af039231e623f857fe",
+  measurementId: "G-XQ8S6L3R2Q"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
+// ================================================================
+// Constants
+// ================================================================
+const VILLAGER_NAMES = {
+  one:   'Provakar',
+  two:   'Gajamati',
+  three: 'Naisha',
+  four:  'Debesh',
+  five:  'Nayyaab'
+};
+const KEYS = ['one', 'two', 'three', 'four', 'five'];
+const CAP  = { one: 'One', two: 'Two', three: 'Three', four: 'Four', five: 'Five' };
 
-//generate house and garden location
-var houseOneLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-var houseTwoLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-var houseThreeLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-var houseFourLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-var houseFiveLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-
-var houseOneLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-var houseTwoLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-var houseThreeLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-var houseFourLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-var houseFiveLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-
-var gardenOneLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-var gardenTwoLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-var gardenThreeLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-var gardenFourLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-var gardenFiveLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-
-var gardenOneLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-var gardenTwoLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-var gardenThreeLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-var gardenFourLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-var gardenFiveLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-
-var houseOne = document.querySelector("#houseOne");
-houseOne.style.left = houseOneLocationX;
-houseOne.style.top = houseOneLocationY;
-
-var houseTwo = document.querySelector("#houseTwo");
-houseTwo.style.left = houseTwoLocationX;
-houseTwo.style.top = houseTwoLocationY;
-
-var houseThree = document.querySelector("#houseThree");
-houseThree.style.left = houseThreeLocationX;
-houseThree.style.top = houseThreeLocationY;
-
-var houseFour = document.querySelector("#houseFour");
-houseFour.style.left = houseFourLocationX;
-houseFour.style.top = houseFourLocationY;
-
-var houseFive = document.querySelector("#houseFive");
-houseFive.style.left = houseFiveLocationX;
-houseFive.style.top = houseFiveLocationY;
-
-var gardenOne = document.querySelector("#gardenOne");
-gardenOne.style.left = gardenOneLocationX;
-gardenOne.style.top = gardenOneLocationY;
-
-var gardenTwo = document.querySelector("#gardenTwo");
-gardenTwo.style.left = gardenTwoLocationX;
-gardenTwo.style.top = gardenTwoLocationY;
-
-var gardenThree = document.querySelector("#gardenThree");
-gardenThree.style.left = gardenThreeLocationX;
-gardenThree.style.top = gardenThreeLocationY;
-
-var gardenFour = document.querySelector("#gardenFour");
-gardenFour.style.left = gardenFourLocationX;
-gardenFour.style.top = gardenFourLocationY;
-
-var gardenFive = document.querySelector("#gardenFive");
-gardenFive.style.left = gardenFiveLocationX;
-gardenFive.style.top = gardenFiveLocationY;
-
-//make rising water and walls work. Need to make it so user can choose where to place wall
-//var speed = parseInt(document.querySelector("#speed").value);
-var speed = 50;
-
-function endTurn(click) {
-	var water = document.querySelector("#water");
-	var currWidth = parseInt(water.clientWidth);
-	var wall = document.querySelector("#wall");
-	var waterW = parseInt(water.style.width);
-	var waterH = parseInt(water.style.height);
-
-	var wallL = parseInt(wall.style.left);
-	var wallH = parseInt(wall.style.height);
-	console.log(speed);
-	
-	/*
-	if ((water.style.width != wall.style.left)
-			|| ((water.style.width >= wall.style.left) && (water.style.height >= wall.style.height))) { 
-		water.style.width = (currWidth + speed) +'px';
-	}
-	*/
-	if ((waterW < wallL)
-			|| ((waterW >= wallL) && (waterH >= wallH))) { 
-		water.style.width = (currWidth + speed) +'px';
-	}
-	else {
-		window.prompt("you win");
-	}
-
-	if ((water.style.width > houseOneLocationX) && (water.style.width > houseTwoLocationX) && (water.style.width > houseThreeLocationX) && (water.style.width > houseFourLocationX) && (water.style.width > houseFiveLocationX)) {
-		window.prompt("you lose");
-		location.reload();
-	}
-	
-	
-	//reshowing all of the villager buttons
-	var bricksOne = document.querySelector("#oneBricks");
-	bricksOne.style.display = "block";
-
-	var bricksTwo = document.querySelector("#twoBricks");
-	bricksTwo.style.display = "block";
-
-	var bricksThree = document.querySelector("#threeBricks");
-	bricksThree.style.display = "block";
-
-	var bricksFour = document.querySelector("#fourBricks");
-	bricksFour.style.display = "block";
-
-	var bricksFive = document.querySelector("#fiveBricks");
-	bricksFive.style.display = "block";
-
-	var foodOne = document.querySelector("#oneFood");
-	foodOne.style.display = "block";
-
-	var foodTwo = document.querySelector("#twoFood");
-	foodTwo.style.display = "block";
-
-	var foodThree = document.querySelector("#threeFood");
-	foodThree.style.display = "block";
-
-	var foodFour = document.querySelector("#fourFood");
-	foodFour.style.display = "block";
-
-	var foodFive = document.querySelector("#fiveFood");
-	foodFive.style.display = "block";
-
-
-	document.getElementById('foodAmount').value -=1; 
-
-	//chance of a random event occuring this turn:
-	var chance = Math.floor(Math.random() * 50);
-	randomEvent(chance);
-
-	//Losing conditions:
-	var int = parseInt(document.getElementById('foodAmount').value);
-	if (int < 1) {
-		window.prompt("you lose");
-		location.reload();
-	}
-	if (water.style.width > houseOneLocationX) {
-		var houseOne = document.querySelector("#houseOne");
-		houseOne.style.display = 'none';
-		firstDeath();
-	}
-	if (water.style.width > houseTwoLocationX) {
-		var houseOne = document.querySelector("#houseTwo");
-		houseOne.style.display = 'none';
-		secondDeath();
-	}
-	if (water.style.width > houseThreeLocationX) {
-		var houseOne = document.querySelector("#houseThree");
-		houseOne.style.display = 'none';
-		thirdDeath();
-	}
-	if (water.style.width > houseFourLocationX) {
-		var houseOne = document.querySelector("#houseFour");
-		houseOne.style.display = 'none';
-		fourthDeath();
-	}
-	if (water.style.width > houseFiveLocationX) {
-		var houseOne = document.querySelector("#houseFive");
-		houseOne.style.display = 'none';
-		fifthDeath();
-	}
-	if (water.style.width > gardenOneLocationX) {
-		var houseOne = document.querySelector("#gardenOne");
-		houseOne.style.display = 'none';
-	}
-	if (water.style.width > gardenTwoLocationX) {
-		var houseOne = document.querySelector("#gardenTwo");
-		houseOne.style.display = 'none';
-	}
-	if (water.style.width > gardenThreeLocationX) {
-		var houseOne = document.querySelector("#gardenThree");
-		houseOne.style.display = 'none';
-	} 
-	if (water.style.width > gardenFourLocationX) {
-		var houseOne = document.querySelector("#gardenFour");
-		houseOne.style.display = 'none';
-	}
-	if (water.style.width > gardenFiveLocationX) {
-		var houseOne = document.querySelector("#gardenFive");
-		houseOne.style.display = 'none';
-	}
-	
+// ================================================================
+// Session state
+// ================================================================
+let myPlayerId = localStorage.getItem('slrPlayerId');
+if (!myPlayerId) {
+  myPlayerId = Math.random().toString(36).substr(2, 9);
+  localStorage.setItem('slrPlayerId', myPlayerId);
 }
 
-//villager make bricks buttons
+let myName           = '';
+let myVillager       = null;
+let roomId           = null;
+let amHost           = false;
+let isProcessingTurn = false;
+let lastShownEvent   = null;
+let localGameState   = null;
+let localPlayers     = null;
 
-
-function bricksOne(click) {
-	var int = parseInt(document.getElementById('brickAmount').value) + 1;
-	document.getElementById('brickAmount').value = int;
-	var bricksOne = document.querySelector("#oneBricks");
-	bricksOne.style.display = "none";
-	var foodOne = document.querySelector("#oneFood");
-	foodOne.style.display = "none";
+// ================================================================
+// Lobby — name entry
+// ================================================================
+function goToLobbyOptions() {
+  const name = document.getElementById('playerName').value.trim();
+  if (!name) { alert('Please enter a name.'); return; }
+  myName = name;
+  document.getElementById('enterName').style.display    = 'none';
+  document.getElementById('lobbyOptions').style.display = 'block';
 }
 
-function bricksTwo(click) {
-	var int = parseInt(document.getElementById('brickAmount').value) + 1;
-	document.getElementById('brickAmount').value = int;
-	var bricksOne = document.querySelector("#twoBricks");
-	bricksOne.style.display = "none";
-	var foodTwo = document.querySelector("#twoFood");
-	foodTwo.style.display = "none";
+// ================================================================
+// Room code
+// ================================================================
+function genRoomCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let c = '';
+  for (let i = 0; i < 5; i++) c += chars[Math.floor(Math.random() * chars.length)];
+  return c;
 }
 
-function bricksThree(click) {
-	var int = parseInt(document.getElementById('brickAmount').value) + 1;
-	document.getElementById('brickAmount').value = int;
-	var bricksOne = document.querySelector("#threeBricks");
-	bricksOne.style.display = "none";
-	var foodThree = document.querySelector("#threeFood");
-	foodThree.style.display = "none";
+// ================================================================
+// Create room (host)
+// ================================================================
+async function createRoom() {
+  roomId    = genRoomCode();
+  amHost    = true;
+  myVillager = 'one';
+
+  await db.ref('rooms/' + roomId).set({
+    state: 'lobby',
+    host:  myPlayerId,
+    players: {
+      [myPlayerId]: { name: myName, villager: 'one', readyForNextTurn: false, alive: true }
+    }
+  });
+
+  db.ref(`rooms/${roomId}/players/${myPlayerId}`).onDisconnect().remove();
+  showWaitingRoom();
+  subscribeToRoom();
 }
 
-function bricksFour(click) {
-	var int = parseInt(document.getElementById('brickAmount').value) + 1;
-	document.getElementById('brickAmount').value = int;
-	var bricksOne = document.querySelector("#fourBricks");
-	bricksOne.style.display = "none";
-	var foodOne = document.querySelector("#fourFood");
-	foodOne.style.display = "none";
+// ================================================================
+// Join room
+// ================================================================
+async function joinRoom() {
+  const code = document.getElementById('joinCode').value.trim().toUpperCase();
+  if (!code) { showLobbyError('Enter a room code.'); return; }
+
+  const snap = await db.ref('rooms/' + code).once('value');
+  if (!snap.exists())               { showLobbyError('Room not found.'); return; }
+
+  const room    = snap.val();
+  if (room.state !== 'lobby')       { showLobbyError('That game is already in progress.'); return; }
+
+  const players = room.players || {};
+  if (Object.keys(players).length >= 5) { showLobbyError('Room is full (max 5 players).'); return; }
+
+  const taken     = Object.values(players).map(p => p.villager);
+  const available = KEYS.filter(k => !taken.includes(k));
+  if (!available.length)            { showLobbyError('No villagers available.'); return; }
+
+  myVillager = available[0];
+  roomId     = code;
+
+  await db.ref(`rooms/${roomId}/players/${myPlayerId}`).set({
+    name: myName, villager: myVillager, readyForNextTurn: false, alive: true
+  });
+  db.ref(`rooms/${roomId}/players/${myPlayerId}`).onDisconnect().remove();
+
+  showWaitingRoom();
+  subscribeToRoom();
 }
 
-function bricksFive(click) {
-	var int = parseInt(document.getElementById('brickAmount').value) + 1;
-	document.getElementById('brickAmount').value = int;
-	var bricksOne = document.querySelector("#fiveBricks");
-	bricksOne.style.display = "none";
-	var foodOne = document.querySelector("#fiveFood");
-	foodOne.style.display = "none";
+function showLobbyError(msg) {
+  document.getElementById('lobbyError').textContent = msg;
 }
 
-//villager make wall buttons:
-function wall(click) {  
-	var bricks = document.querySelector("#brickAmount");
-	if (bricks.value > 2) {
-		bricks.value = bricks.value - 3;
-	
-	
-
-//	if (walls.value == 1) {
-//		firstWallPlace();
-		
-//	}
-//	if (bricks.value >= 0) {
-		var makeWall = document.querySelector("#wall");
-		makeWall.style.display="block";
-		var currHeight = makeWall.clientHeight;
-		makeWall.style.height = (currHeight + 50) +'px'; //if I put a global variable here instead of 50, maybe I could make a plantMangrove function that decreases this value as more mangroves are planted.
-//	}
-	}
-	
-
-}
-
-
-//Allowing player to choose wall location:
-/*
-function firstWallPlace() {
-	window.addEventListener('keydown', function (event) {
-		var playerImage = document.getElementById('wall');
-		var valueToMoveBy = 5;
-		switch (event.keyCode) {
-			case 65:
-				playerImage.style.left = parseInt(playerImage.style.left, 10) - valueToMoveBy + 'px';
-				break;
-			case 68:
-				playerImage.style.left = parseInt(playerImage.style.left, 10) + valueToMoveBy + 'px';
-				break;
-			default:
-				break;
-		}
-	});
-}
-*/
-/*
-function firstWallPlace() {
-window.addEventListener('keydown', function (event) {
-  switch (event.keyCode) {
-    case 65:
-      playerImage.style.left = parseInt(playerImage.style.left, 10) - valueToMoveBy + 'px';
-      break;
-    case 68:
-      playerImage.style.left = parseInt(playerImage.style.left, 10) + valueToMoveBy + 'px';
-      break;
-    default:
-      break;
+// ================================================================
+// Waiting room UI
+// ================================================================
+function showWaitingRoom() {
+  document.getElementById('lobbyOptions').style.display  = 'none';
+  document.getElementById('waitingRoom').style.display   = 'block';
+  document.getElementById('roomCodeDisplay').textContent = roomId;
+  if (amHost) {
+    document.getElementById('startButton').style.display = 'inline-block';
+    document.getElementById('waitingMsg').style.display  = 'none';
   }
-});
-}
-*/
-
-function moveWallRight(test){
-	var wall = document.getElementById("wall");
-	var lbStyle = window.getComputedStyle(wall);
-	var leftValue = lbStyle.getPropertyValue("left").replace("px", "");
-
-	var bricks = document.querySelector("#brickAmount");
-	if (bricks.value > 0) {
-
-	wall.style.left = (Number(leftValue) + 50) + "px";
-	document.getElementById('brickAmount').value -= 1;
-
-	}
 }
 
-
-function moveWallLeft(test){
-	var wall = document.getElementById("wall");
-	var lbStyle = window.getComputedStyle(wall);
-	var leftValue = lbStyle.getPropertyValue("left").replace("px", "");
-
-	var bricks = document.querySelector("#brickAmount");
-	if (bricks.value > 0) {
-
-	wall.style.left = (Number(leftValue) - 50) + "px";
-	document.getElementById('brickAmount').value -= 1;
-	}
-
+function updateWaitingRoomUI(players) {
+  const list = document.getElementById('playerList');
+  list.innerHTML = '';
+  Object.values(players).forEach(p => {
+    const li = document.createElement('li');
+    li.textContent = `${p.name} — ${VILLAGER_NAMES[p.villager]}`;
+    list.appendChild(li);
+  });
 }
 
-//village people. For now I am going to make it simpler and only have 3 villagers total
-//actually probabily only want like 5 or 6 villagers total so it isn't complicated
-/*
-let HouseOnePeople = ['Oishika', 'Provakar', 'Naisha', 'Joti', 'Pitam'];
-let HouseTwoPeople = ['Gajamati', 'Bapti', 'Monohar', 'Mishita', 'Nayyaab'];
-let HouseThreePeople = ['Omio', 'Purnava', 'Pakhi', 'Debesh', 'Minati'];
-*/
-var HouseOnePeople = 'Provakar';
-var HouseTwoPeople = 'Gajamati';
-var HouseThreePeople = 'Naisha';
-var HouseFourPeople = 'Debesh';
-var HouseFivePeople = 'Nayyaab';
-peopleListOne.innerHTML = HouseOnePeople;
-peopleListTwo.innerHTML = HouseTwoPeople;
-peopleListThree.innerHTML = HouseThreePeople;
-peopleListFour.innerHTML = HouseFourPeople;
-peopleListFive.innerHTML = HouseFivePeople;
-
-
-//fun random events:
-function randomEvent(number) {
-	if (number == 0 || number == 1 || number == 2 || number == 4) {
-		window.prompt("Monsoon!");
-		monsoon();
-	}
-	else if (number == 5 || number == 6 || number == 7) {
-		window.prompt("Flooding!");
-		flooding();
-	}
-	else if (number == 13) {
-		window.prompt("Resource Donation!");
-		resourceDonation();
-	}
-	else if (number == 14 || number == 15) {
-		window.prompt("Food Donation!");
-		foodDonation();
-	}
-	else if (number == 8) {
-		window.prompt("A combination of factors related to the country’s geography, population, and economy make Bangladesh one of the countries most prone to the effects of SLR.");
-	}
-	else if (number == 9) {
-		window.prompt("The combination of the thermal expansion of the oceans and sea ice melt is expected to cause a SLR of 0.3 m to 1 m by the end of the century. More than 70% of the land area of Bangladesh is less than 1 meter above sea level.");
-	}
-	else if (number == 10) {
-		window.prompt("Bangladesh is more at risk to flooding because the country experiences a monsoon season and SLR exacerbates the flood risks already associated with the heavy rainfall and cyclonic storm surges caused by monsoons.");
-	}
-	else if (number == 11 || number == 12) {
-		window.prompt("Salt Water Intrustion Effects Your Crops!")
-		saltWater();
-	}
+// ================================================================
+// Start game (host only)
+// ================================================================
+async function startGame() {
+  if (!amHost) return;
+  const gameData = buildInitialGameState();
+  await db.ref('rooms/' + roomId).update({ state: 'playing', gameData });
 }
 
-function monsoon() {
-	endTurn();
-	endTurn();
-	endTurn();
+function buildInitialGameState() {
+  const rX = () => Math.floor(Math.random() * 850) + 200;
+  const rY = () => Math.floor(Math.random() * 500) + 20;
+
+  const houses = {}, gardens = {}, mangroves = {}, villagers = {};
+  KEYS.forEach(k => {
+    houses[k]    = { x: rX(), y: rY(), alive: true };
+    gardens[k]   = { x: rX(), y: rY(), alive: true };
+    mangroves[k] = { planted: false, x: 0, y: 0 };
+    villagers[k] = { acted: false };
+  });
+
+  return {
+    waterWidth: 100,
+    wallLeft:   700,
+    wallHeight: 0,
+    wallVisible: false,
+    brickAmount: 0,
+    foodAmount:  5,
+    speed:       50,
+    lastEvent:   null,
+    houses, gardens, mangroves, villagers
+  };
 }
 
-function flooding() {
-	endTurn();
+// ================================================================
+// Firebase subscription
+// ================================================================
+function subscribeToRoom() {
+  db.ref('rooms/' + roomId).on('value', snap => {
+    if (!snap.exists()) return;
+    const room      = snap.val();
+    localPlayers    = room.players   || {};
+    localGameState  = room.gameData  || null;
+
+    if (room.state === 'lobby') {
+      updateWaitingRoomUI(localPlayers);
+
+    } else if (room.state === 'playing') {
+      if (document.getElementById('lobby').style.display !== 'none') launchGameScreen();
+      renderGame(localGameState, localPlayers);
+      if (amHost && !isProcessingTurn) checkAndProcessEndOfTurn(localGameState, localPlayers);
+
+    } else if (room.state === 'ended') {
+      if (document.getElementById('lobby').style.display !== 'none') launchGameScreen();
+      renderGame(localGameState, localPlayers);
+      showGameOver(room.gameResult);
+    }
+  });
 }
 
-function saltWater() {
-	document.getElementById('foodAmount').value -=3;
+// ================================================================
+// Launch game screen
+// ================================================================
+function launchGameScreen() {
+  document.getElementById('lobby').style.display      = 'none';
+  document.getElementById('gameScreen').style.display = 'block';
+  document.getElementById('myVillagerLabel').textContent =
+    'You control: ' + VILLAGER_NAMES[myVillager];
+  KEYS.forEach(k => {
+    document.getElementById('peopleList' + CAP[k]).textContent = VILLAGER_NAMES[k];
+  });
 }
 
-function resourceDonation() {
-	var int = parseInt(document.getElementById('brickAmount').value) + 15;
-	document.getElementById('brickAmount').value = int;}
+// ================================================================
+// Render
+// ================================================================
+function renderGame(gs, players) {
+  if (!gs) return;
 
-function foodDonation() {
-	var int = parseInt(document.getElementById('foodAmount').value) + 10;
-	document.getElementById('foodAmount').value = int;
+  document.getElementById('water').style.width = gs.waterWidth + 'px';
+
+  const wallEl = document.getElementById('wall');
+  wallEl.style.display = gs.wallVisible ? 'block' : 'none';
+  wallEl.style.left    = gs.wallLeft   + 'px';
+  wallEl.style.height  = gs.wallHeight + 'px';
+
+  document.getElementById('brickAmount').value = gs.brickAmount;
+  document.getElementById('foodAmount').value  = gs.foodAmount;
+
+  KEYS.forEach(k => {
+    const h       = gs.houses[k];
+    const g       = gs.gardens[k];
+    const m       = gs.mangroves[k];
+    const acted   = gs.villagers[k].acted;
+    const canAct  = (k === myVillager) && h.alive && !acted;
+
+    // House
+    const hEl = document.getElementById('house' + CAP[k]);
+    hEl.style.display = h.alive ? 'block' : 'none';
+    if (h.alive) { hEl.style.left = h.x + 'px'; hEl.style.top = h.y + 'px'; }
+
+    // Garden
+    const gEl = document.getElementById('garden' + CAP[k]);
+    gEl.style.display = g.alive ? 'block' : 'none';
+    if (g.alive) { gEl.style.left = g.x + 'px'; gEl.style.top = g.y + 'px'; }
+
+    // Mangrove
+    const mEl = document.getElementById('mangroveImage' + CAP[k]);
+    mEl.style.display = m.planted ? 'block' : 'none';
+    if (m.planted) { mEl.style.left = m.x + 'px'; mEl.style.top = m.y + 'px'; }
+
+    // Villager label
+    document.getElementById('peopleList' + CAP[k]).style.display = h.alive ? 'block' : 'none';
+
+    // Action buttons
+    const bBtn = document.getElementById(k + 'Bricks');
+    const fBtn = document.getElementById(k + 'Food');
+    const pBtn = document.getElementById(k + 'Mangrove');
+
+    bBtn.style.display = h.alive ? 'block' : 'none';
+    fBtn.style.display = h.alive ? 'block' : 'none';
+    pBtn.style.display = (h.alive && !m.planted) ? 'block' : 'none';
+
+    bBtn.disabled = !canAct;
+    fBtn.disabled = !canAct;
+    pBtn.disabled = !canAct;
+  });
+
+  // End Turn button
+  const me      = players[myPlayerId];
+  const iReady  = me && me.readyForNextTurn;
+  const endBtn  = document.getElementById('endTurn');
+  endBtn.disabled    = iReady;
+  endBtn.textContent = iReady ? 'Waiting...' : 'End Turn';
+
+  const readyCount = Object.values(players).filter(p => p.readyForNextTurn && p.alive).length;
+  const aliveCount = Object.values(players).filter(p => p.alive).length;
+  document.getElementById('endTurnStatus').textContent = readyCount + '/' + aliveCount + ' ready';
+
+  // Random event notification
+  if (gs.lastEvent && gs.lastEvent !== lastShownEvent) {
+    lastShownEvent = gs.lastEvent;
+    setTimeout(() => alert(gs.lastEvent), 200);
+  }
 }
 
-//Food bars:
-
-function foodBarOne(click){
-	var int = parseInt(document.getElementById('foodAmount').value) + 1;
-	document.getElementById('foodAmount').value = int;
-	var foodOne = document.querySelector("#oneFood");
-	foodOne.style.display = "none";
-	var bricksOne = document.querySelector("#oneBricks");
-	bricksOne.style.display = "none";
+// ================================================================
+// Player actions — all go through Firebase transactions
+// ================================================================
+function doMakeBricks(k) {
+  if (k !== myVillager || !localGameState) return;
+  db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
+    if (!gs || gs.villagers[k].acted || !gs.houses[k].alive) return;
+    gs.brickAmount += 1;
+    gs.villagers[k].acted = true;
+    return gs;
+  });
 }
 
-function foodBarTwo(click){
-	var int = parseInt(document.getElementById('foodAmount').value) + 1;
-	document.getElementById('foodAmount').value = int;
-	var foodTwo = document.querySelector("#twoFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#twoBricks");
-	bricksOne.style.display = "none";
+function doMakeFood(k) {
+  if (k !== myVillager || !localGameState) return;
+  db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
+    if (!gs || gs.villagers[k].acted || !gs.houses[k].alive) return;
+    gs.foodAmount += 1;
+    gs.villagers[k].acted = true;
+    return gs;
+  });
 }
 
-function foodBarThree(click){
-	var int = parseInt(document.getElementById('foodAmount').value) + 1;
-	document.getElementById('foodAmount').value = int;
-	var foodThree = document.querySelector("#threeFood");
-	foodThree.style.display = "none";
-	var bricksOne = document.querySelector("#threeBricks");
-	bricksOne.style.display = "none";
-
+function doPlantMangrove(k) {
+  if (k !== myVillager || !localGameState) return;
+  if (localGameState.foodAmount < 2) { alert('Need 2 food to plant a mangrove.'); return; }
+  const mx = Math.floor(Math.random() * 850) + 200;
+  const my = Math.floor(Math.random() * 500) + 20;
+  db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
+    if (!gs || gs.villagers[k].acted || !gs.houses[k].alive || gs.mangroves[k].planted) return;
+    if (gs.foodAmount < 2) return;
+    gs.foodAmount       -= 2;
+    gs.mangroves[k]      = { planted: true, x: mx, y: my };
+    gs.speed             = Math.max(5, gs.speed - 7);
+    gs.villagers[k].acted = true;
+    return gs;
+  });
 }
 
-function foodBarFour(click){
-	var int = parseInt(document.getElementById('foodAmount').value) + 1;
-	document.getElementById('foodAmount').value = int;
-	var foodFour = document.querySelector("#fourFood");
-	foodFour.style.display = "none";
-	var bricksOne = document.querySelector("#fourBricks");
-	bricksOne.style.display = "none";
-
+function doBuildWall() {
+  if (!localGameState || localGameState.brickAmount < 3) {
+    alert('Need 3 bricks to build/extend the wall.'); return;
+  }
+  db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
+    if (!gs || gs.brickAmount < 3) return;
+    gs.brickAmount -= 3;
+    gs.wallHeight  += 50;
+    gs.wallVisible  = true;
+    return gs;
+  });
 }
 
-function foodBarFive(click){
-	var int = parseInt(document.getElementById('foodAmount').value) + 1;
-	document.getElementById('foodAmount').value = int;
-	var foodFive = document.querySelector("#fiveFood");
-	foodFive.style.display = "none";
-	var bricksOne = document.querySelector("#fiveBricks");
-	bricksOne.style.display = "none";
-
+function doMoveWallLeft() {
+  if (!localGameState || localGameState.brickAmount < 1) {
+    alert('Need 1 brick to move the wall.'); return;
+  }
+  db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
+    if (!gs || gs.brickAmount < 1) return;
+    gs.brickAmount -= 1;
+    gs.wallLeft    -= 50;
+    return gs;
+  });
 }
 
-//planting mangroves:
-
-function plantMangroveOne(click) {
-	var mangroveOneLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-	var mangroveOneLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-
-	var mangroveOne = document.querySelector("#oneMangrove");
-	var mangroveImageOne = document.querySelector("#mangroveImageOne");
-	mangroveImageOne.style.left = mangroveOneLocationX;
-	mangroveImageOne.style.top = mangroveOneLocationY;
-
-	mangroveOne.style.display = "none";
-	mangroveImageOne.style.display = "block";
-
-	var foodOne = document.querySelector("#oneFood");
-	foodOne.style.display = "none";
-	var bricksOne = document.querySelector("#oneBricks");
-	bricksOne.style.display = "none";
-
-	document.getElementById('foodAmount').value -=2;
-
-	//speed = parseInt(document.querySelector("#speed").value) -9;
-	speed = (speed - 7);
+function doMoveWallRight() {
+  if (!localGameState || localGameState.brickAmount < 1) {
+    alert('Need 1 brick to move the wall.'); return;
+  }
+  db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
+    if (!gs || gs.brickAmount < 1) return;
+    gs.brickAmount -= 1;
+    gs.wallLeft    += 50;
+    return gs;
+  });
 }
 
-function plantMangroveTwo(click) {
-	var mangroveTwoLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-	var mangroveTwoLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-
-	var mangroveTwo = document.querySelector("#twoMangrove");
-	var mangroveImageTwo = document.querySelector("#mangroveImageTwo");
-	mangroveImageTwo.style.left = mangroveTwoLocationX;
-	mangroveImageTwo.style.top = mangroveTwoLocationY;
-
-	mangroveTwo.style.display = "none";
-	mangroveImageTwo.style.display = "block";
-
-	var foodTwo = document.querySelector("#twoFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#twoBricks");
-	bricksOne.style.display = "none";
-
-	document.getElementById('foodAmount').value -=2;
-
-//	speed = parseInt(document.querySelector("#speed").value) -9;
-	speed = (speed - 7);
+function voteEndTurn() {
+  if (!localPlayers || !localPlayers[myPlayerId]) return;
+  if (localPlayers[myPlayerId].readyForNextTurn) return;
+  db.ref(`rooms/${roomId}/players/${myPlayerId}/readyForNextTurn`).set(true);
 }
 
-function plantMangroveThree(click) {
-	var mangroveThreeLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-	var mangroveThreeLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
+// ================================================================
+// End-of-turn processing (host only)
+// ================================================================
+function checkAndProcessEndOfTurn(gs, players) {
+  if (!gs || !players) return;
+  const alive = Object.values(players).filter(p => p.alive);
+  if (!alive.length || !alive.every(p => p.readyForNextTurn)) return;
 
-	var mangroveThree = document.querySelector("#threeMangrove");
-	var mangroveImageThree = document.querySelector("#mangroveImageThree");
-	mangroveImageThree.style.left = mangroveThreeLocationX;
-	mangroveImageThree.style.top = mangroveThreeLocationY;
+  isProcessingTurn = true;
 
-	mangroveThree.style.display = "none";
-	mangroveImageThree.style.display = "block";
+  // Compute random values before the transaction — transactions can retry
+  const eventRoll = Math.floor(Math.random() * 50);
+  const event     = computeRandomEvent(eventRoll);
+  const capturedPlayers = players;
 
-	var foodThree = document.querySelector("#threeFood");
-	foodThree.style.display = "none";
-	var bricksOne = document.querySelector("#threeBricks");
-	bricksOne.style.display = "none";
+  db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
+    if (!gs) return gs;
 
-	document.getElementById('foodAmount').value -=2;
+    // --- Advance water (blocked by a wall that spans full height) ---
+    const fullyBlocked = gs.wallVisible && gs.wallHeight >= 565 && gs.waterWidth >= gs.wallLeft;
+    if (!fullyBlocked) gs.waterWidth += gs.speed;
 
-	//speed = parseInt(document.querySelector("#speed").value) - 9;
-	speed = (speed -7);
+    // --- Random event ---
+    if (event) {
+      if (event.extraAdvances) {
+        for (let i = 0; i < event.extraAdvances; i++) {
+          const stillBlocked = gs.wallVisible && gs.wallHeight >= 565 && gs.waterWidth >= gs.wallLeft;
+          if (!stillBlocked) gs.waterWidth += gs.speed;
+        }
+      }
+      if (event.bricks) gs.brickAmount = Math.max(0, gs.brickAmount + event.bricks);
+      if (event.food)   gs.foodAmount  = Math.max(0, gs.foodAmount  + event.food);
+      gs.lastEvent = event.message;
+    } else {
+      gs.lastEvent = null;
+    }
+
+    // --- Flood houses and gardens ---
+    KEYS.forEach(k => {
+      if (gs.houses[k].alive  && gs.waterWidth > gs.houses[k].x)  gs.houses[k].alive  = false;
+      if (gs.gardens[k].alive && gs.waterWidth > gs.gardens[k].x) gs.gardens[k].alive = false;
+    });
+
+    // --- Garden food income: 1 per surviving garden ---
+    const aliveGardens = KEYS.filter(k => gs.gardens[k].alive).length;
+    gs.foodAmount += aliveGardens;
+
+    // --- Reset villager action flags ---
+    KEYS.forEach(k => { gs.villagers[k].acted = false; });
+
+    return gs;
+
+  }, async (error, committed, snap) => {
+    if (error || !committed) { isProcessingTurn = false; return; }
+
+    const gs = snap.val();
+
+    // Update each player's alive status and clear their ready vote
+    const updates = {};
+    Object.entries(capturedPlayers).forEach(([pid, p]) => {
+      if (!gs.houses[p.villager].alive) {
+        updates[`rooms/${roomId}/players/${pid}/alive`] = false;
+      }
+      updates[`rooms/${roomId}/players/${pid}/readyForNextTurn`] = false;
+    });
+    await db.ref().update(updates);
+
+    // --- Win / lose ---
+    const allHousesDead = KEYS.every(k => !gs.houses[k].alive);
+    const noFood        = gs.foodAmount <= 0;
+    const waterWon      = gs.wallVisible && gs.wallHeight >= 565 && gs.waterWidth >= gs.wallLeft;
+
+    if (allHousesDead || noFood) {
+      await db.ref('rooms/' + roomId).update({ state: 'ended', gameResult: 'lose' });
+    } else if (waterWon) {
+      await db.ref('rooms/' + roomId).update({ state: 'ended', gameResult: 'win' });
+    }
+
+    isProcessingTurn = false;
+  });
 }
 
-function plantMangroveFour(click) {
-	var mangroveTwoLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-	var mangroveTwoLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-
-	var mangroveTwo = document.querySelector("#fourMangrove");
-	var mangroveImageTwo = document.querySelector("#mangroveImageFour");
-	mangroveImageTwo.style.left = mangroveTwoLocationX;
-	mangroveImageTwo.style.top = mangroveTwoLocationY;
-
-	mangroveTwo.style.display = "none";
-	mangroveImageTwo.style.display = "block";
-
-	var foodTwo = document.querySelector("#fourFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#fourBricks");
-	bricksOne.style.display = "none";
-
-	document.getElementById('foodAmount').value -=2;
-
-	//speed = parseInt(document.querySelector("#speed").value) - 9;
-	speed = (speed -7);
+// ================================================================
+// Random events
+// ================================================================
+function computeRandomEvent(n) {
+  if ([0, 1, 2, 4].includes(n))
+    return { message: 'Monsoon! The sea surged forward three times!', extraAdvances: 3 };
+  if ([5, 6, 7].includes(n))
+    return { message: 'Flooding! An extra wave hit this turn!', extraAdvances: 1 };
+  if (n === 13)
+    return { message: 'Resource Donation! +15 bricks!', bricks: 15 };
+  if ([14, 15].includes(n))
+    return { message: 'Food Donation! +10 food!', food: 10 };
+  if ([11, 12].includes(n))
+    return { message: 'Salt Water Intrusion! Your crops lost 3 food.', food: -3 };
+  if (n === 8)
+    return { message: 'Fact: Bangladesh is one of the countries most prone to the effects of sea level rise.' };
+  if (n === 9)
+    return { message: 'Fact: Over 70% of Bangladesh\'s land area is less than 1 meter above sea level.' };
+  if (n === 10)
+    return { message: 'Fact: Monsoon season and sea level rise together greatly increase Bangladesh\'s flood risk.' };
+  return null;
 }
 
-function plantMangroveFive(click) {
-	var mangroveTwoLocationX = (Math.floor(Math.random() * 850) + 200) + 'px';
-	var mangroveTwoLocationY = (Math.floor(Math.random() * 500) + 20) + 'px';
-
-	var mangroveTwo = document.querySelector("#fiveMangrove");
-	var mangroveImageTwo = document.querySelector("#mangroveImageFive");
-	mangroveImageTwo.style.left = mangroveTwoLocationX;
-	mangroveImageTwo.style.top = mangroveTwoLocationY;
-
-	mangroveTwo.style.display = "none";
-	mangroveImageTwo.style.display = "block";
-
-	var foodTwo = document.querySelector("#fiveFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#fiveBricks");
-	bricksOne.style.display = "none";
-
-	document.getElementById('foodAmount').value -=2;
-
-	//speed = parseInt(document.querySelector("#speed").value) - 9;
-	speed = (speed -7);
+// ================================================================
+// Game over screen
+// ================================================================
+function showGameOver(result) {
+  const overlay = document.getElementById('gameOverOverlay');
+  document.getElementById('gameOverMsg').textContent = result === 'win'
+    ? 'You Win! Your wall held back the sea and saved the village!'
+    : 'Game Over. Your village was lost to the rising waters.';
+  overlay.style.display = 'flex';
 }
 
-//getting rid of villagers with flooded houses:
-function firstDeath() {
-	var personOne = document.getElementById('peopleListOne');
-	personOne.style.display = "none";
-
-	var foodTwo = document.querySelector("#oneFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#oneBricks");
-	bricksOne.style.display = "none";
-	var mangroveOne = document.querySelector("#oneMangrove");
-	mangroveOne.style.display = "none";
-
-}
-
-function secondDeath() {
-	var personOne = document.getElementById('peopleListTwo');
-	personOne.style.display = "none";
-
-	var foodTwo = document.querySelector("#twoFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#twoBricks");
-	bricksOne.style.display = "none";
-	var mangroveOne = document.querySelector("#twoMangrove");
-	mangroveOne.style.display = "none";
-
-}
-
-function thirdDeath() {
-	var personOne = document.getElementById('peopleListThree');
-	personOne.style.display = "none";
-
-	var foodTwo = document.querySelector("#threeFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#threeBricks");
-	bricksOne.style.display = "none";
-	var mangroveOne = document.querySelector("#threeMangrove");
-	mangroveOne.style.display = "none";
-
-}
-
-function fourthDeath() {
-	var personOne = document.getElementById('peopleListFour');
-	personOne.style.display = "none";
-
-	var foodTwo = document.querySelector("#fourFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#fourBricks");
-	bricksOne.style.display = "none";
-	var mangroveOne = document.querySelector("#fourMangrove");
-	mangroveOne.style.display = "none";
-
-}
-
-function fifthDeath() {
-	var personOne = document.getElementById('peopleListFive');
-	personOne.style.display = "none";
-
-	var foodTwo = document.querySelector("#fiveFood");
-	foodTwo.style.display = "none";
-	var bricksOne = document.querySelector("#fiveBricks");
-	bricksOne.style.display = "none";
-	var mangroveOne = document.querySelector("#fiveMangrove");
-	mangroveOne.style.display = "none";
-
-}
-
-//instructions stuff:
+// ================================================================
+// Instructions overlay
+// ================================================================
 function instruct() {
-	var black = document.querySelector('#black');
-	var instructions = document.querySelector('#instructions');
-	var button = document.querySelector('#instructButt');
-	black.style.display = 'none';
-	instructions.style.display = 'none';
-	button.style.display = 'none';
+  document.getElementById('black').style.display       = 'none';
+  document.getElementById('instructions').style.display = 'none';
+  document.getElementById('instructButt').style.display = 'none';
 }
+
