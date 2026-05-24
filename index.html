@@ -187,10 +187,10 @@
   <button id="fiveFood"     title="Gather 1 food"          style="position:absolute; top:125px; left:1220px" onclick="doMakeFood('five')">F</button>
   <button id="fiveMangrove" title="Plant mangrove (2 food)" style="position:absolute; top:125px; left:1245px" onclick="doPlantMangrove('five')">P</button>
 
-  <!-- Wall controls (shared — any player can use) -->
-  <button title="Raise wall (3 bricks)"   style="position:absolute; top:290px; left:1100px" onclick="doBuildWall()">Build Wall</button>
-  <button title="Move wall left (1 brick)"  style="position:absolute; top:320px; left:1100px" onclick="doMoveWallLeft()">&#8592; Wall</button>
-  <button title="Move wall right (1 brick)" style="position:absolute; top:320px; left:1168px" onclick="doMoveWallRight()">Wall &#8594;</button>
+  <!-- Wall controls (shared — any player can use, only if their villager is alive) -->
+  <button id="buildWallBtn"    title="Raise wall (3 bricks)"    style="position:absolute; top:290px; left:1100px" onclick="doBuildWall()">Build Wall</button>
+  <button id="moveWallLeftBtn" title="Move wall left (1 brick)"  style="position:absolute; top:320px; left:1100px" onclick="doMoveWallLeft()">&#8592; Wall</button>
+  <button id="moveWallRightBtn" title="Move wall right (1 brick)" style="position:absolute; top:320px; left:1168px" onclick="doMoveWallRight()">Wall &#8594;</button>
 
   <p id="myVillagerLabel" style="position:absolute; top:460px; left:1100px; margin:0; font-size:85%; font-weight:bold; color:#333;"></p>
 
@@ -201,5 +201,3 @@
 <script src="GlobalSLR.js"></script>
 </body>
 </html>
-
-	
