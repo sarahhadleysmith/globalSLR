@@ -214,11 +214,8 @@ function subscribeToRoom() {
 function launchGameScreen() {
   document.getElementById('lobby').style.display      = 'none';
   document.getElementById('gameScreen').style.display = 'block';
-  document.getElementById('myVillagerLabel').textContent =
-    'You control: ' + VILLAGER_NAMES[myVillager];
-  KEYS.forEach(k => {
-    document.getElementById('peopleList' + CAP[k]).textContent = VILLAGER_NAMES[k];
-  });
+  document.getElementById('myVillagerLabel').textContent = 'You are: ' + myName;
+  // Villager name labels are populated by renderGame using actual player names
 }
 
 // ================================================================
@@ -259,8 +256,11 @@ function renderGame(gs, players) {
     mEl.style.display = m.planted ? 'block' : 'none';
     if (m.planted) { mEl.style.left = m.x + 'px'; mEl.style.top = m.y + 'px'; }
 
-    // Villager label
-    document.getElementById('peopleList' + CAP[k]).style.display = h.alive ? 'block' : 'none';
+    // Villager label — show the actual player's name, not the pre-set name
+    const personEl = document.getElementById('peopleList' + CAP[k]);
+    const playerForVillager = Object.values(players).find(p => p.villager === k);
+    personEl.textContent   = playerForVillager ? playerForVillager.name : '—';
+    personEl.style.display = h.alive ? 'block' : 'none';
 
     // Action buttons
     const bBtn = document.getElementById(k + 'Bricks');
@@ -286,6 +286,12 @@ function renderGame(gs, players) {
   const readyCount = Object.values(players).filter(p => p.readyForNextTurn && p.alive).length;
   const aliveCount = Object.values(players).filter(p => p.alive).length;
   document.getElementById('endTurnStatus').textContent = readyCount + '/' + aliveCount + ' ready';
+
+  // Wall buttons — disabled if this player's villager has died
+  const myVillagerAlive = gs.houses[myVillager] && gs.houses[myVillager].alive;
+  document.getElementById('buildWallBtn').disabled    = !myVillagerAlive;
+  document.getElementById('moveWallLeftBtn').disabled  = !myVillagerAlive;
+  document.getElementById('moveWallRightBtn').disabled = !myVillagerAlive;
 
   // Random event notification
   if (gs.lastEvent && gs.lastEvent !== lastShownEvent) {
@@ -334,7 +340,8 @@ function doPlantMangrove(k) {
 }
 
 function doBuildWall() {
-  if (!localGameState || localGameState.brickAmount < 3) {
+  if (!localGameState || !localGameState.houses[myVillager].alive) return;
+  if (localGameState.brickAmount < 3) {
     alert('Need 3 bricks to build/extend the wall.'); return;
   }
   db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
@@ -347,7 +354,8 @@ function doBuildWall() {
 }
 
 function doMoveWallLeft() {
-  if (!localGameState || localGameState.brickAmount < 1) {
+  if (!localGameState || !localGameState.houses[myVillager].alive) return;
+  if (localGameState.brickAmount < 1) {
     alert('Need 1 brick to move the wall.'); return;
   }
   db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
@@ -359,7 +367,8 @@ function doMoveWallLeft() {
 }
 
 function doMoveWallRight() {
-  if (!localGameState || localGameState.brickAmount < 1) {
+  if (!localGameState || !localGameState.houses[myVillager].alive) return;
+  if (localGameState.brickAmount < 1) {
     alert('Need 1 brick to move the wall.'); return;
   }
   db.ref('rooms/' + roomId + '/gameData').transaction(gs => {
@@ -423,6 +432,10 @@ function checkAndProcessEndOfTurn(gs, players) {
     const aliveGardens = KEYS.filter(k => gs.gardens[k].alive).length;
     gs.foodAmount += aliveGardens;
 
+    // --- Food consumption: 1 per surviving villager ---
+    const aliveVillagers = KEYS.filter(k => gs.houses[k].alive).length;
+    gs.foodAmount -= aliveVillagers;
+
     // --- Reset villager action flags ---
     KEYS.forEach(k => { gs.villagers[k].acted = false; });
 
@@ -445,7 +458,7 @@ function checkAndProcessEndOfTurn(gs, players) {
 
     // --- Win / lose ---
     const allHousesDead = KEYS.every(k => !gs.houses[k].alive);
-    const noFood        = gs.foodAmount <= 0;
+    const noFood        = gs.foodAmount < 0;
     const waterWon      = gs.wallVisible && gs.wallHeight >= 565 && gs.waterWidth >= gs.wallLeft;
 
     if (allHousesDead || noFood) {
